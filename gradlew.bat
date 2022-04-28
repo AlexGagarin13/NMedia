@@ -87,3 +87,8 @@ exit /b 1
 if "%OS%"=="Windows_NT" endlocal
 
 :omega
+
+- name: Grant execute permission for gradlew
+  run: chmod +x gradlew
+- name: Build with Gradle
+  run: ./gradlew build --info
