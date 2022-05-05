@@ -1,8 +1,5 @@
 package ru.netology.nmedia.utils
 
-import java.util.*
-import kotlin.math.floor
-
 object Utils {
     fun formatActivitiesOnPost(count: Int): String {
         return when (count) {
