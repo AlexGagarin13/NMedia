@@ -1,4 +1,4 @@
-package ru.netology.nmedia.ViewModel
+package ru.netology.nmedia.viewModel
 
 import androidx.lifecycle.ViewModel
 import ru.netology.nmedia.data.PostRepository

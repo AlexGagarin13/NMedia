@@ -4,11 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
-import ru.netology.nmedia.ViewModel.PostViewModel
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.utils.Utils
-
+import ru.netology.nmedia.viewModel.PostViewModel
 
 
 class MainActivity : AppCompatActivity() {
