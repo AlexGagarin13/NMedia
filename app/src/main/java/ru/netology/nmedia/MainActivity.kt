@@ -3,9 +3,7 @@ package ru.netology.nmedia
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import ru.netology.nmedia.data.impl.PostsAdapter
 import ru.netology.nmedia.databinding.ActivityMainBinding
-import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewModel.PostViewModel
 
 
