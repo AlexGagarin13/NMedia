@@ -7,4 +7,5 @@
     <string name="_10" translatable="false">10</string>
     <string name="_5" translatable="false">5</string>
     <string name="shared_amount" translatable="false">shared amount</string>
+    <string name="remove">Remove</string>
 </resources>
