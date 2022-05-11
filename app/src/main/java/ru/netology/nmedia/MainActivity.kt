@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.ActivityMainBinding
+import ru.netology.nmedia.utils.hideKeyBoard
 import ru.netology.nmedia.viewModel.PostViewModel
 
 
@@ -20,7 +21,18 @@ class MainActivity : AppCompatActivity() {
         val adapter = PostsAdapter(viewModel)
         binding.postsRecyclerView.adapter = adapter
         viewModel.data.observe(this) { posts ->
-           adapter.submitList(posts)
+            adapter.submitList(posts)
+        }
+        binding.saveButton.setOnClickListener {
+            with(binding.contentEditText) {
+                val content = text.toString()
+                viewModel.onSaveButtonClicked(content)
+                clearFocus()
+                hideKeyBoard()
+            }
+        }
+        viewModel.currentPost.observe(this) { currentPost ->
+            binding.contentEditText.setText(currentPost?.content)
         }
     }
 }
