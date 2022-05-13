@@ -4,155 +4,111 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/common_spacing"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/postsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/toolsTopBarrier"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/post" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/toolsTopBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="contentEditText,saveButton" />
+
+    <EditText
+        android:id="@+id/contentEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:hint="@string/post_text"
+        android:inputType="textMultiLine"
+        android:padding="@dimen/common_spacing"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/saveButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/toolsTopBarrier" />
+
+    <ImageButton
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/description_post_like"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/contentEditText"
+        app:srcCompat="@drawable/ic_save_48" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/editGroup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:constraint_referenced_ids="cancelButton, editPic, editLabel, editableText" />
+
     <ImageView
-        android:id="@+id/avatar"
-        android:layout_width="@dimen/posts_avatar_size"
-        android:layout_height="@dimen/posts_avatar_size"
-        android:layout_marginBottom="@dimen/common_spacing"
-        android:contentDescription="@string/post_author_avatar"
-        app:layout_constraintBottom_toBottomOf="@id/headerBarrier"
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/description_edit_cancel"
+        android:padding="@dimen/common_spacing"
+        app:layout_constraintBottom_toTopOf="@id/contentEditText"
+        app:layout_constraintEnd_toEndOf="@id/saveButton"
+        app:layout_constraintStart_toStartOf="@id/saveButton"
+        app:srcCompat="@drawable/ic_baseline_close_24dp" />
+
+    <ImageView
+        android:id="@+id/editPic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/edit_text"
+        android:paddingStart="@dimen/minimal_spacing"
+        app:layout_constraintBottom_toBottomOf="@id/cancelButton"
+        app:layout_constraintRight_toLeftOf="@id/editableText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@sample/posts_avatars" />
+        app:layout_constraintTop_toTopOf="@id/cancelButton"
+        app:srcCompat="@drawable/ic_baseline_edit_24dp"
+        tools:ignore="RtlSymmetry" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/authorName"
+        android:id="@+id/editLabel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/common_spacing"
-        android:layout_marginEnd="@dimen/common_spacing"
+        android:background="@android:color/transparent"
+        android:padding="@dimen/minimal_spacing"
+        android:text="@string/edit_text"
+        android:textColor="#2196F3"
+        android:textSize="@dimen/minimal_text"
+        app:layout_constraintBottom_toTopOf="@id/editableText"
+        app:layout_constraintEnd_toStartOf="@id/cancelButton"
+        app:layout_constraintStart_toEndOf="@+id/editPic"
+        app:layout_constraintTop_toTopOf="@+id/editPic" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/editableText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_text"
+        android:inputType="textMultiLine"
+        android:padding="@dimen/minimal_spacing"
+        android:textSize="@dimen/minimal_text"
+        android:maxLines="3"
         android:ellipsize="end"
-        android:singleLine="true"
-        app:layout_constraintBottom_toTopOf="@+id/published"
-        app:layout_constraintEnd_toStartOf="@id/menu"
-        app:layout_constraintStart_toEndOf="@+id/avatar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:text="Нетология. Университет интернет-профессий будущего" />
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/published"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/common_spacing"
-        android:layout_marginEnd="@dimen/common_spacing"
-        android:layout_marginBottom="@dimen/common_spacing"
-        android:ellipsize="end"
-        android:singleLine="true"
-        app:layout_constraintBottom_toBottomOf="@id/headerBarrier"
-        app:layout_constraintEnd_toStartOf="@id/menu"
-        app:layout_constraintStart_toEndOf="@+id/avatar"
-        app:layout_constraintTop_toBottomOf="@+id/authorName"
-        tools:text="21 мая в 18:36" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/common_spacing"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/description_post_menu"
-        android:src="@drawable/ic_baseline_vert_24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/headerBarrier"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="avatar, published, menu" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/postContent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_spacing"
-        android:layout_marginBottom="@dimen/common_spacing"
-        android:autoLink="web"
-        app:layout_constraintBottom_toBottomOf="@+id/postContentBottomBarrier"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerBarrier"
-        tools:text="Привет, это новая Нетология! Когда-то Нетология начиналась с интенсивов по онлайн-маркетингу. Затем появились курсы по дизайну, разработке, аналитике и управлению. Мы растём сами и помогаем расти студентам: от новичков до уверенных профессионалов. Но самое важное остаётся с нами: мы верим, что в каждом уже есть сила, которая заставляет хотеть больше, целиться выше, бежать быстрее. Наша миссия — помочь встать на путь роста и начать цепочку перемен → http://netolo.gy/fyb" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/postContentBottomBarrier"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="postContent" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/likesAmountImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_spacing"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/likes_amount"
-        android:src="@drawable/ic_like_border_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postContentBottomBarrier" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/likesAmount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/text_spacing"
-        android:layout_marginTop="@dimen/common_spacing"
-        tools:text="@string/_10"
-        app:layout_constraintStart_toEndOf="@+id/likesAmountImage"
-        app:layout_constraintTop_toBottomOf="@+id/postContentBottomBarrier" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/sharedImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/common_spacing"
-        android:layout_marginTop="@dimen/common_spacing"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/shared_amount"
-        android:src="@drawable/ic_share_24"
-        app:layout_constraintStart_toEndOf="@+id/likesAmount"
-        app:layout_constraintTop_toBottomOf="@+id/postContentBottomBarrier" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/sharedAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/text_spacing"
-        tools:text="@string/_5"
-        app:layout_constraintStart_toEndOf="@+id/sharedImage"
-        app:layout_constraintTop_toTopOf="@+id/sharedImage" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/viewsImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_spacing"
-        android:layout_marginEnd="@dimen/text_spacing"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/likes_amount"
-        android:src="@drawable/ic_views_24"
-        app:layout_constraintEnd_toStartOf="@+id/viewsAmount"
-        app:layout_constraintTop_toBottomOf="@+id/postContentBottomBarrier" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/viewsAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/text_spacing"
-        android:layout_marginEnd="@dimen/common_spacing"
-        android:ellipsize="middle"
-        android:singleLine="true"
-        tools:text="@string/_5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/viewsImage" />
-
+        app:layout_constraintBottom_toBottomOf="@id/editPic"
+        app:layout_constraintEnd_toStartOf="@id/cancelButton"
+        app:layout_constraintStart_toEndOf="@+id/editPic"
+        app:layout_constraintTop_toBottomOf="@id/editLabel" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
