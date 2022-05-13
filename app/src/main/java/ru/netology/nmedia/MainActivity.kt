@@ -2,11 +2,12 @@ package ru.netology.nmedia
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import ru.netology.nmedia.adapter.PostsAdapter
-import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.utils.hideKeyBoard
 import ru.netology.nmedia.viewModel.PostViewModel
+import ru.netology.nmedia.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,8 +32,27 @@ class MainActivity : AppCompatActivity() {
                 hideKeyBoard()
             }
         }
+
+        binding.cancelButton.setOnClickListener {
+            viewModel.onButtonCancelClicked()
+        }
+
         viewModel.currentPost.observe(this) { currentPost ->
-            binding.contentEditText.setText(currentPost?.content)
+
+            with(binding) {
+                val content = currentPost?.content
+                contentEditText.setText(content)
+                editableText.hint = content
+                if (content != null) {
+                    contentEditText.requestFocus()
+                    contentEditText.hideKeyBoard()
+                    editGroup.visibility = View.VISIBLE
+                } else {
+                    contentEditText.clearFocus()
+                    contentEditText.hideKeyBoard()
+                    editGroup.visibility = View.GONE
+                }
+            }
         }
     }
 }

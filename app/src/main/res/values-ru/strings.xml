@@ -9,4 +9,6 @@
     <string name="post_text">Текст поста</string>
     <string name="description_post_like">Сохранить пост</string>
     <string name="menu_edit">Редактировать</string>
+    <string name="description_edit_cancel">Отменить изменения</string>
+    <string name="edit_text">Edit text</string>
 </resources>

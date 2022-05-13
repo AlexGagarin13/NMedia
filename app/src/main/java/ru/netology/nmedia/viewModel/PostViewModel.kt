@@ -39,6 +39,9 @@ class PostViewModel : ViewModel(), PostInteractionListener {
     override fun onEditClicked(post: Post) {
        currentPost.value = post
     }
+    override fun onButtonCancelClicked() {
+        currentPost.value = null
+    }
 
 
     //endregion

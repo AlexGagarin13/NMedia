@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -11,10 +11,10 @@
         android:id="@+id/postsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/toolsTopBarrier"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/post"/>
+        app:layout_constraintBottom_toTopOf="@+id/toolsTopBarrier"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/post" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/toolsTopBarrier"
@@ -27,16 +27,14 @@
         android:id="@+id/contentEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         android:hint="@string/post_text"
         android:inputType="textMultiLine"
-        android:background="@android:color/transparent"
         android:padding="@dimen/common_spacing"
-        android:importantForAutofill="no"
-        app:layout_constraintTop_toTopOf="@id/toolsTopBarrier"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/saveButton"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="@id/toolsTopBarrier" />
 
     <ImageButton
         android:id="@+id/saveButton"
@@ -45,11 +43,72 @@
         android:layout_marginTop="@dimen/common_spacing"
         android:background="@android:color/transparent"
         android:contentDescription="@string/description_post_like"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/contentEditText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:srcCompat="@drawable/ic_save_48"
-        />
+        app:srcCompat="@drawable/ic_save_48" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/editGroup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:constraint_referenced_ids="cancelButton, editPic, editLabel, editableText" />
+
+    <ImageView
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/description_edit_cancel"
+        android:padding="@dimen/common_spacing"
+        app:layout_constraintBottom_toTopOf="@id/contentEditText"
+        app:layout_constraintEnd_toEndOf="@id/saveButton"
+        app:layout_constraintStart_toStartOf="@id/saveButton"
+        app:srcCompat="@drawable/ic_baseline_close_24dp" />
+
+    <ImageView
+        android:id="@+id/editPic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/edit_text"
+        android:paddingStart="@dimen/minimal_spacing"
+        app:layout_constraintBottom_toBottomOf="@id/cancelButton"
+        app:layout_constraintRight_toLeftOf="@id/editableText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cancelButton"
+        app:srcCompat="@drawable/ic_baseline_edit_24dp"
+        tools:ignore="RtlSymmetry" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/editLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:padding="@dimen/minimal_spacing"
+        android:text="@string/edit_text"
+        android:textColor="#2196F3"
+        android:textSize="@dimen/minimal_text"
+        app:layout_constraintBottom_toTopOf="@id/editableText"
+        app:layout_constraintEnd_toStartOf="@id/cancelButton"
+        app:layout_constraintStart_toEndOf="@+id/editPic"
+        app:layout_constraintTop_toTopOf="@+id/editPic" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/editableText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_text"
+        android:inputType="textMultiLine"
+        android:padding="@dimen/minimal_spacing"
+        android:textSize="@dimen/minimal_text"
+        android:maxLines="3"
+        android:ellipsize="end"
+        app:layout_constraintBottom_toBottomOf="@id/editPic"
+        app:layout_constraintEnd_toStartOf="@id/cancelButton"
+        app:layout_constraintStart_toEndOf="@+id/editPic"
+        app:layout_constraintTop_toBottomOf="@id/editLabel" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
