@@ -43,12 +43,13 @@ internal class PostsAdapter(
         }
 
         init {
-            binding.likesAmountImage.setOnClickListener {
+            binding.buttonLikes.setOnClickListener {
                 listener.onLikedClicked(post)
             }
-            binding.sharedImage.setOnClickListener {
+            binding.buttonReposts.setOnClickListener {
                 listener.onShareClicked(post)
             }
+            binding.menu.setOnClickListener { popupMenu.show() }
         }
 
         fun bind(post: Post) {
@@ -57,17 +58,12 @@ internal class PostsAdapter(
                 authorName.text = post.author
                 postContent.text = post.content
                 published.text = post.published
-                likesAmountImage.setImageResource(getLikeIconResId(post.likedByMe))
-                likesAmount.text = Utils.formatActivitiesOnPost(post.likes)
-                sharedAmount.text = Utils.formatActivitiesOnPost(post.shared)
-                viewsAmount.text = Utils.formatActivitiesOnPost(post.viewed)
-                menu.setOnClickListener { popupMenu.show() }
+                buttonLikes.isChecked = post.likedByMe
+                buttonLikes.text = Utils.formatActivitiesOnPost(post.likes)
+                buttonReposts.text = Utils.formatActivitiesOnPost(post.shared)
+                buttonViewsAmount.text = Utils.formatActivitiesOnPost(post.viewed)
             }
         }
-
-        @DrawableRes
-        private fun getLikeIconResId(liked: Boolean) =
-            if (liked) R.drawable.ic_liked_24 else R.drawable.ic_like_border_24
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
