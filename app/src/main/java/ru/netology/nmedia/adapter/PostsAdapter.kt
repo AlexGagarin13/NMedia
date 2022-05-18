@@ -1,6 +1,7 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.PopupMenu
@@ -49,6 +50,8 @@ internal class PostsAdapter(
             binding.buttonReposts.setOnClickListener {
                 listener.onShareClicked(post)
             }
+            binding.buttonPlayVideo.setOnClickListener { listener.onButtonPlayVideoClicked(post) }
+            binding.videoContent.setOnClickListener { listener.onButtonPlayVideoClicked(post) }
             binding.menu.setOnClickListener { popupMenu.show() }
         }
 
@@ -62,6 +65,8 @@ internal class PostsAdapter(
                 buttonLikes.text = Utils.formatActivitiesOnPost(post.likes)
                 buttonReposts.text = Utils.formatActivitiesOnPost(post.shared)
                 buttonViewsAmount.text = Utils.formatActivitiesOnPost(post.viewed)
+                groupVideo.visibility =
+                    if (post.videoURL.isBlank()) View.GONE else View.VISIBLE
             }
         }
     }

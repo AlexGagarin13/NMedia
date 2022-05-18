@@ -6,10 +6,12 @@
     <string name="description_post_menu">Меню поста</string>
     <string name="likes_amount">Количество лайков</string>
     <string name="remove">Удалить</string>
-    <string name="post_text">Текст поста</string>
+    <string name="post_text">Добавить пост</string>
     <string name="description_post_like">Сохранить пост</string>
     <string name="menu_edit">Редактировать</string>
     <string name="description_edit_cancel">Отменить изменения</string>
     <string name="edit_text">Править текст</string>
     <string name="views">Количество просмотров</string>
+    <string name="chooser_share_post">Поделиться</string>
+    <string name="description_post_save">Сохранить</string>
 </resources>

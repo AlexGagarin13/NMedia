@@ -1,15 +1,17 @@
 <resources>
     <string name="app_name">NMedia</string>
     <string name="nmedia">NMedia!</string>
-    <string name="post_author_avatar">post_author_avatar</string>
-    <string name="description_post_menu">description_post_menu</string>
-    <string name="likes_amount">likes amount</string>
+    <string name="post_author_avatar">Post author avatar</string>
+    <string name="description_post_menu">Post menu</string>
+    <string name="likes_amount">Likes amount</string>
     <string name="shared_amount" translatable="false">Shared amount</string>
     <string name="remove">Remove</string>
-    <string name="post_text">Post text</string>
+    <string name="post_text">Add post</string>
     <string name="description_post_like">Save post</string>
     <string name="menu_edit">Edit</string>
     <string name="description_edit_cancel">Edit cancel</string>
     <string name="edit_text">Edit text</string>
     <string name="views">Views</string>
+    <string name="chooser_share_post">Share post</string>
+    <string name="description_post_save">Save</string>
 </resources>

@@ -1,9 +1,12 @@
 package ru.netology.nmedia
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import ru.netology.nmedia.activity.PostContentActivity
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.utils.hideKeyBoard
 import ru.netology.nmedia.viewModel.PostViewModel
@@ -24,35 +27,38 @@ class MainActivity : AppCompatActivity() {
         viewModel.data.observe(this) { posts ->
             adapter.submitList(posts)
         }
-        binding.saveButton.setOnClickListener {
-            with(binding.contentEditText) {
-                val content = text.toString()
-                viewModel.onSaveButtonClicked(content)
-                clearFocus()
-                hideKeyBoard()
-            }
+        binding.fab.setOnClickListener {
+            viewModel.onAddClicked()
         }
 
-        binding.cancelButton.setOnClickListener {
-            viewModel.onButtonCancelClicked()
+        viewModel.sharePostContent.observe(this) { postContent ->
+            val intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, postContent)
+                type = "text/plain"
+            }
+
+            val shareIntent = Intent.createChooser(
+                intent, getString(R.string.chooser_share_post)
+            )
+            startActivity(shareIntent)
         }
 
-        viewModel.currentPost.observe(this) { currentPost ->
+        viewModel.playVideoURL.observe(this) { videoURL ->
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(videoURL))
+            startActivity(intent)
+        }
 
-            with(binding) {
-                val content = currentPost?.content
-                contentEditText.setText(content)
-                editableText.hint = content
-                if (content != null) {
-                    contentEditText.requestFocus()
-                    contentEditText.hideKeyBoard()
-                    editGroup.visibility = View.VISIBLE
-                } else {
-                    contentEditText.clearFocus()
-                    contentEditText.hideKeyBoard()
-                    editGroup.visibility = View.GONE
-                }
-            }
+        val postContentActivityLauncher = registerForActivityResult(
+            PostContentActivity.ResultContract
+        ) { postContent ->
+            postContent ?: return@registerForActivityResult
+            viewModel.onSaveButtonClicked(postContent)
+        }
+
+        viewModel.navigateToPostContentScreen.observe(this) {
+            postContentActivityLauncher.launch(viewModel.currentPost.value?.content)
         }
     }
 }
+
