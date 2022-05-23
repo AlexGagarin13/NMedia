@@ -10,7 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NMedia">
         <activity
-            android:name=".MainActivity"
+            android:name=".UI.AppActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +21,7 @@
         </activity>
 
         <activity
-            android:name=".activity.IntentHandlerActivity"
+            android:name=".UI.IntentHandlerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -29,10 +30,6 @@
             </intent-filter>
         </activity>
 
-
-        <activity
-            android:name=".activity.PostContentActivity"
-            android:exported="false" />
     </application>
 
     <queries>

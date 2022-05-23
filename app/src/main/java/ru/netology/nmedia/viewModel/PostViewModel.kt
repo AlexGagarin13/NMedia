@@ -20,7 +20,7 @@ class PostViewModel(
     val data by repository::data
 
     val sharePostContent = SingleLiveEvent<String>()
-    val navigateToPostContentScreen = SingleLiveEvent<Unit>()
+    val navigateToPostContentScreen = SingleLiveEvent<String>()
     val playVideoURL = SingleLiveEvent<String>()
     val currentPost = MutableLiveData<Post?>(null)
 
@@ -59,7 +59,7 @@ class PostViewModel(
 
     override fun onEditClicked(post: Post) {
         currentPost.value = post
-        navigateToPostContentScreen.call()
+        navigateToPostContentScreen.value = post.content
     }
 
     //endregion
