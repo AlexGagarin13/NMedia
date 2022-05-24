@@ -21,6 +21,7 @@ class PostViewModel(
 
     val sharePostContent = SingleLiveEvent<String>()
     val navigateToPostContentScreen = SingleLiveEvent<String>()
+    val navigateToViewContentScreenEvent = SingleLiveEvent<Long>()
     val playVideoURL = SingleLiveEvent<String>()
     val currentPost = MutableLiveData<Post?>(null)
 

@@ -11,6 +11,9 @@
         <action
             android:id="@+id/to_postContentFragment"
             app:destination="@id/postContentFragment" />
+        <action
+            android:id="@+id/fromFeedToPostView"
+            app:destination="@id/postViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/postContentFragment"
@@ -20,5 +23,18 @@
             android:name="initialContent"
             app:argType="string"
             app:nullable="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/postViewFragment"
+        android:name="ru.netology.nmedia.UI.PostViewFragment"
+        android:label="post_view_fragment"
+        tools:layout="@layout/post_view_fragment">
+        <action
+            android:id="@+id/fromPostViewToPostEdit"
+            app:destination="@id/postContentFragment" />
+        <argument
+            android:name="postId"
+            app:argType="long" />
     </fragment>
 </navigation>

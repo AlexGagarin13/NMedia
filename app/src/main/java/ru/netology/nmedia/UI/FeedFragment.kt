@@ -2,19 +2,14 @@ package ru.netology.nmedia.UI
 
 import android.content.Intent
 import android.net.Uri
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-
 import ru.netology.nmedia.R
-
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.viewModel.PostViewModel
 import ru.netology.nmedia.databinding.FeedFragmentBinding
@@ -39,22 +34,19 @@ class FeedFragment : Fragment() {
             )
             startActivity(shareIntent)
         }
+        viewModel.navigateToPostContentScreen.observe(this) { initialContent ->
+            val direction = FeedFragmentDirections.toPostContentFragment(initialContent)
+            findNavController().navigate(direction)
+        }
+
+        viewModel.navigateToViewContentScreenEvent.observe(this) { postId ->
+            val direction = FeedFragmentDirections.fromFeedToPostView(postId)
+            findNavController().navigate(direction)
+        }
 
         viewModel.playVideoURL.observe(this) { videoURL ->
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(videoURL))
             startActivity(intent)
-        }
-
-        setFragmentResultListener(
-            requestKey = PostContentFragment.REQUEST_KEY
-        ) { requestKey, bundle ->
-            if (requestKey != PostContentFragment.REQUEST_KEY) return@setFragmentResultListener
-            val newPostContent = bundle.getString(PostContentFragment.RESULT_KEY) ?: return@setFragmentResultListener
-            viewModel.onSaveButtonClicked(newPostContent)
-        }
-        viewModel.navigateToPostContentScreen.observe(this) {initialContent ->
-            val direction = FeedFragmentDirections.toPostContentFragment(initialContent)
-            findNavController().navigate(direction)
         }
     }
 
@@ -71,10 +63,18 @@ class FeedFragment : Fragment() {
         binding.fab.setOnClickListener {
             viewModel.onAddClicked()
         }
+        setFragmentResultListener(
+            requestKey = PostContentFragment.REQUEST_KEY
+        ) { requestKey, bundle ->
+            if (requestKey != PostContentFragment.REQUEST_KEY) return@setFragmentResultListener
+            val newPostContent =
+                bundle.getString(PostContentFragment.RESULT_KEY) ?: return@setFragmentResultListener
+            viewModel.onSaveButtonClicked(newPostContent)
+        }
 
     }.root
 
-    companion object{
+    companion object {
         const val TAG = "feedFragment"
     }
 }
