@@ -53,10 +53,8 @@ class FeedFragment : Fragment() {
             viewModel.onSaveButtonClicked(newPostContent)
         }
         viewModel.navigateToPostContentScreen.observe(this) {initialContent ->
-            findNavController().navigate(
-                R.id.to_postContentFragment,
-                PostContentFragment.createBundle(initialContent)
-            )
+            val direction = FeedFragmentDirections.toPostContentFragment(initialContent)
+            findNavController().navigate(direction)
         }
     }
 

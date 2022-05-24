@@ -15,42 +15,32 @@ import ru.netology.nmedia.databinding.PostContentFragmentBinding
 
 class PostContentFragment() : Fragment() {
 
-    private val args by navArgs<PostContentFragment>()
+    private val args by navArgs<PostContentFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = PostContentFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
-        binding.edit.setText(initialContent)
+        binding.edit.setText(args.initialContent)
         binding.edit.requestFocus()
         binding.ok.setOnClickListener {
-            binding.onOkButtonClicked()
+            onOkButtonClicked(binding)
         }
     }.root
 
-    private fun PostContentFragmentBinding.onOkButtonClicked() {
-        val text = edit.text
+    private fun onOkButtonClicked(binding: PostContentFragmentBinding) {
+        val text = binding.edit.text
         if (!text.isNullOrBlank()) {
-            val resulBundle = Bundle(1)
-            resulBundle.putString(RESULT_KEY, text.toString())
-            setFragmentResult(REQUEST_KEY, resulBundle)
+            val resultBundle = Bundle(1)
+            resultBundle.putString(RESULT_KEY, text.toString())
+            setFragmentResult(REQUEST_KEY, resultBundle)
         }
         findNavController().popBackStack()
     }
 
     companion object {
-        private const val INITIAL_CONTENT_ARGUMENTS_KEY = "initialCOntent"
-
         const val REQUEST_KEY = "requestKey"
         const val RESULT_KEY = "postNewContent"
-
-        fun createInstance(initialContent: String?) = PostContentFragment().apply {
-            arguments = createBundle(initialContent)
-        }
-
-        fun createBundle(initialContent: String?) =  Bundle(1).apply {
-            putString(INITIAL_CONTENT_ARGUMENTS_KEY, initialContent)
-        }
     }
 }
