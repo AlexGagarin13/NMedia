@@ -3,7 +3,6 @@ package ru.netology.nmedia.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -53,6 +52,7 @@ internal class PostsAdapter(
             binding.buttonPlayVideo.setOnClickListener { listener.onButtonPlayVideoClicked(post) }
             binding.videoContent.setOnClickListener { listener.onButtonPlayVideoClicked(post) }
             binding.menu.setOnClickListener { popupMenu.show() }
+            binding.root.setOnClickListener { listener.onPostClicked(post) }
         }
 
         fun bind(post: Post) {

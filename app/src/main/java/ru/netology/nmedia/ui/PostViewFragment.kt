@@ -1,27 +1,27 @@
-package ru.netology.nmedia.UI
+package ru.netology.nmedia.ui
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.PostViewFragmentBinding
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.utils.Utils
 import ru.netology.nmedia.viewModel.PostViewModel
 
 class PostViewFragment : Fragment() {
 
     private val args by navArgs<PostViewFragmentArgs>()
 
-    private val viewModel by viewModels<PostViewModel>()
+    private val viewModel by activityViewModels<PostViewModel>()
 
     private lateinit var singlePost: Post
 
@@ -29,8 +29,7 @@ class PostViewFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return PostViewFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
+    ) = PostViewFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
             with(binding) {
 
                 viewModel.data.value?.let { listOfPosts ->
@@ -39,7 +38,7 @@ class PostViewFragment : Fragment() {
                 }
 
                 viewModel.data.observe(viewLifecycleOwner) { listOfPosts ->
-                    if (!listOfPosts.any{post -> post.id == args.postId}) {
+                    if (!listOfPosts.any { post -> post.id == args.postId }) {
                         return@observe
                     }
                     if (listOfPosts.isNullOrEmpty()) {
@@ -59,20 +58,20 @@ class PostViewFragment : Fragment() {
 
                 viewModel.navigateToPostContentScreen.observe(viewLifecycleOwner) { initialContent ->
                     val direction =
-                        ru.netology.nmedia.UI.PostViewFragmentDirections.fromPostViewToPostEdit(
+                        ru.netology.nmedia.ui.PostViewFragmentDirections.fromPostViewToPostEdit(
                             initialContent
                         )
                     findNavController().navigate(direction)
                 }
 
-                .setOnClickListener {
+                buttonLikes.setOnClickListener {
                     viewModel.onLikedClicked(singlePost)
                 }
 
-                shareMaterialButton.setOnClickListener {
-                    viewModel.onShareButtonClicked(singlePost)
+                buttonReposts.setOnClickListener {
+                    viewModel.onShareClicked(singlePost)
                 }
-                viewModel.sharedPostContent.observe(viewLifecycleOwner) { postContent ->
+                viewModel.sharePostContent.observe(viewLifecycleOwner) { postContent ->
                     val intent = Intent().apply {
                         action = Intent.ACTION_SEND
                         putExtra(Intent.EXTRA_TEXT, postContent)
@@ -84,66 +83,42 @@ class PostViewFragment : Fragment() {
                 }
 
                 val popupMenu by lazy {
-                    PopupMenu(context, binding.postOptionsMaterialButton).apply {
-                        inflate(R.menu.post_options)
-                        setOnMenuItemClickListener { option ->
-                            when (option.itemId) {
-                                R.id.deletePostOption -> {
-                                    findNavController().popBackStack()
-                                    viewModel.onDeleteMenuOptionClicked(singlePost)
-                                    true
-                                }
-                                R.id.editPostOption -> {
-                                    viewModel.onEditMenuOptionClicked(singlePost)
-                                    true
-                                }
-                                else -> {
-                                    false
+                    context?.let {
+                        PopupMenu(it, binding.menu).apply {
+                            inflate(R.menu.options_post)
+                            setOnMenuItemClickListener { option ->
+                                when (option.itemId) {
+                                    R.id.remove -> {
+                                        findNavController().popBackStack()
+                                        viewModel.onRemoveClicked(singlePost)
+                                        true
+                                    }
+                                    R.id.edit -> {
+                                        viewModel.onEditClicked(singlePost)
+                                        true
+                                    }
+                                    else -> {
+                                        false
+                                    }
                                 }
                             }
                         }
                     }
                 }
 
-                binding.postOptionsMaterialButton.setOnClickListener {
-                    popupMenu.show()
-                }
-
+                binding.menu.setOnClickListener { popupMenu?.show() }
             }
         }.root
     }
 
-    private fun SinglePostFragmentBinding.render(post: Post) {
-        authorNameTextView.text = post.author
-        postText.text = post.content
-        postText.movementMethod = ScrollingMovementMethod()
-        dateAndTimeTextView.text = post.published
-        likesMaterialButton.text = post.likes.formatNumber()
-        likesMaterialButton.isChecked = post.likedByMe
-        shareMaterialButton.text = post.shares.formatNumber()
-        shareMaterialButton.isChecked = post.sharedByMe
-        postViews.text = post.views.toString()
-
-        val urlList = UrlParse.getHyperLinks(postText.text.toString())
-        for (link in urlList) {
-            if (link.contains("youtube")
-                ||
-                link.contains("youtu.be")
-            ) {
-                post.videoUrl = link
-            } else {
-                post.videoUrl = ""
-            }
-        }
-        if (post.videoUrl.isEmpty()) {
-            videoContentGroup.visibility = View.GONE
-        } else {
-            videoContentGroup.visibility = View.VISIBLE
-        }
+    private fun PostViewFragmentBinding.render(post: Post) {
+        authorName.text = post.author
+        postContent.text = post.content
+        published.text = post.published
+        buttonLikes.text = Utils.formatActivitiesOnPost(post.likes)
+        buttonLikes.isChecked = post.likedByMe
+        buttonReposts.text = Utils.formatActivitiesOnPost(post.shared)
+        buttonViewsAmount.text = Utils.formatActivitiesOnPost(post.viewed)
+        groupVideo.visibility =
+            if (post.videoURL.isBlank()) View.GONE else View.VISIBLE
     }
-
-    companion object {
-        const val CALLER_POST = "CallerPost"
-    }
-
-}

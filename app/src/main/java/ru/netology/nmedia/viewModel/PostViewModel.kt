@@ -23,7 +23,7 @@ class PostViewModel(
     val navigateToPostContentScreen = SingleLiveEvent<String>()
     val navigateToViewContentScreenEvent = SingleLiveEvent<Long>()
     val playVideoURL = SingleLiveEvent<String>()
-    val currentPost = MutableLiveData<Post?>(null)
+    private val currentPost = MutableLiveData<Post?>(null)
 
     fun onSaveButtonClicked(content: String) {
         if (content.isBlank()) return
@@ -53,6 +53,10 @@ class PostViewModel(
 
     override fun onButtonPlayVideoClicked(post: Post) {
         playVideoURL.value = post.videoURL
+    }
+
+    override fun onPostClicked(post: Post) {
+        navigateToViewContentScreenEvent.value = post.id
     }
 
 
