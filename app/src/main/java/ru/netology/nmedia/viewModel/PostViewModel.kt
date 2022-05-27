@@ -65,6 +65,7 @@ class PostViewModel(
     override fun onEditClicked(post: Post) {
         currentPost.value = post
         navigateToPostContentScreen.value = post.content
+
     }
 
     //endregion

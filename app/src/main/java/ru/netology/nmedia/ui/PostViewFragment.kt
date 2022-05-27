@@ -30,95 +30,81 @@ class PostViewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = PostViewFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
-            with(binding) {
+        with(binding) {
 
-                viewModel.data.value?.let { listOfPosts ->
-                    singlePost = listOfPosts.first { post -> post.id == args.postId }
-                    render(singlePost)
+            viewModel.data.observe(viewLifecycleOwner) { listOfPosts ->
+                if (!listOfPosts.any { post -> post.id == args.postId }) {
+                    return@observe
                 }
+                if (listOfPosts.isNullOrEmpty()) {
+                    return@observe
+                }
+                singlePost = listOfPosts.first { post -> post.id == args.postId }
+                render(singlePost)
+            }
 
-                viewModel.data.observe(viewLifecycleOwner) { listOfPosts ->
-                    if (!listOfPosts.any { post -> post.id == args.postId }) {
-                        return@observe
-                    }
-                    if (listOfPosts.isNullOrEmpty()) {
-                        return@observe
-                    }
-                    singlePost = listOfPosts.first { post -> post.id == args.postId }
-                    render(singlePost)
-                }
+            viewModel.navigateToPostContentScreen.observe(viewLifecycleOwner) { initialContent ->
+                val direction =
+                    ru.netology.nmedia.ui.PostViewFragmentDirections.fromPostViewToPostEdit(
+                        initialContent
+                    )
+                findNavController().navigate(direction)
+            }
 
-                setFragmentResultListener(requestKey = PostContentFragment.REQUEST_KEY) { requestKey, bundle ->
-                    if (requestKey != PostContentFragment.REQUEST_KEY) return@setFragmentResultListener
-                    val newPostContent =
-                        bundle.getString(PostContentFragment.RESULT_KEY)
-                            ?: return@setFragmentResultListener
-                    viewModel.onSaveButtonClicked(newPostContent)
-                }
+            buttonLikes.setOnClickListener {
+                viewModel.onLikedClicked(singlePost)
+            }
 
-                viewModel.navigateToPostContentScreen.observe(viewLifecycleOwner) { initialContent ->
-                    val direction =
-                        ru.netology.nmedia.ui.PostViewFragmentDirections.fromPostViewToPostEdit(
-                            initialContent
-                        )
-                    findNavController().navigate(direction)
+            buttonReposts.setOnClickListener {
+                viewModel.onShareClicked(singlePost)
+            }
+            viewModel.sharePostContent.observe(viewLifecycleOwner) { postContent ->
+                val intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, postContent)
+                    type = "text/plain"
                 }
+                val shareIntent =
+                    Intent.createChooser(intent, getString(R.string.chooser_share_post))
+                startActivity(shareIntent)
+            }
 
-                buttonLikes.setOnClickListener {
-                    viewModel.onLikedClicked(singlePost)
-                }
-
-                buttonReposts.setOnClickListener {
-                    viewModel.onShareClicked(singlePost)
-                }
-                viewModel.sharePostContent.observe(viewLifecycleOwner) { postContent ->
-                    val intent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_TEXT, postContent)
-                        type = "text/plain"
-                    }
-                    val shareIntent =
-                        Intent.createChooser(intent, getString(R.string.chooser_share_post))
-                    startActivity(shareIntent)
-                }
-
-                val popupMenu by lazy {
-                    context?.let {
-                        PopupMenu(it, binding.menu).apply {
-                            inflate(R.menu.options_post)
-                            setOnMenuItemClickListener { option ->
-                                when (option.itemId) {
-                                    R.id.remove -> {
-                                        findNavController().popBackStack()
-                                        viewModel.onRemoveClicked(singlePost)
-                                        true
-                                    }
-                                    R.id.edit -> {
-                                        viewModel.onEditClicked(singlePost)
-                                        true
-                                    }
-                                    else -> {
-                                        false
-                                    }
+            val popupMenu by lazy {
+                context?.let {
+                    PopupMenu(it, binding.menu).apply {
+                        inflate(R.menu.options_post)
+                        setOnMenuItemClickListener { option ->
+                            when (option.itemId) {
+                                R.id.remove -> {
+                                    findNavController().popBackStack()
+                                    viewModel.onRemoveClicked(singlePost)
+                                    true
+                                }
+                                R.id.edit -> {
+                                    viewModel.onEditClicked(singlePost)
+                                    true
+                                }
+                                else -> {
+                                    false
                                 }
                             }
                         }
                     }
                 }
-
-                binding.menu.setOnClickListener { popupMenu?.show() }
             }
-        }.root
-    }
+            binding.menu.setOnClickListener { popupMenu?.show() }
+        }
+    }.root
+}
 
-    private fun PostViewFragmentBinding.render(post: Post) {
-        authorName.text = post.author
-        postContent.text = post.content
-        published.text = post.published
-        buttonLikes.text = Utils.formatActivitiesOnPost(post.likes)
-        buttonLikes.isChecked = post.likedByMe
-        buttonReposts.text = Utils.formatActivitiesOnPost(post.shared)
-        buttonViewsAmount.text = Utils.formatActivitiesOnPost(post.viewed)
-        groupVideo.visibility =
-            if (post.videoURL.isBlank()) View.GONE else View.VISIBLE
-    }
+private fun PostViewFragmentBinding.render(post: Post) {
+    authorName.text = post.author
+    postContent.text = post.content
+    published.text = post.published
+    buttonLikes.text = Utils.formatActivitiesOnPost(post.likes)
+    buttonLikes.isChecked = post.likedByMe
+    buttonReposts.text = Utils.formatActivitiesOnPost(post.shared)
+    buttonViewsAmount.text = Utils.formatActivitiesOnPost(post.viewed)
+    groupVideo.visibility =
+        if (post.videoURL.isBlank()) View.GONE else View.VISIBLE
+}

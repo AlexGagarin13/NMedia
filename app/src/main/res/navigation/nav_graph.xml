@@ -23,6 +23,9 @@
             android:name="initialContent"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/postContentFragmentToFeedFragment"
+            app:destination="@id/feedFragment" />
     </fragment>
 
     <fragment
